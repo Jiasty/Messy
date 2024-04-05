@@ -17,7 +17,7 @@ public:
     // 日期+=天数
     Date& operator+=(int day);
     // 日期+天数
-    Date operator+(int day);
+    Date operator+(int day) const;
     // 日期-天数
     Date operator-(int day);
     // 日期-=天数
@@ -31,6 +31,8 @@ public:
     Date operator--(int);
     // 前置--
     Date& operator--();
+
+    
     // >运算符重载
     bool operator>(const Date& d);
     // ==运算符重载
@@ -46,14 +48,14 @@ public:
     // 日期-日期 返回天数
     int operator-(const Date& d);
 
-    bool CheckInvalid();
-    // 获取某年某月的天数.会频繁调用，在类里面定义,不声明定义分离,相当于inline
-    int GetMonthDay(int year, int month)
+    bool CheckInvalid() const;
+    //获取某年某月的天数.会频繁调用，在类里面定义,不声明定义分离,相当于inline
+    int GetMonthDay(int year, int month) const
     {
-        assert(month >= 1 && month <= 12);    
+        assert(month > 0 && month < 13);    
         static int month_day[13] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         //判断闰年2月
-        if(2 == month && (year % 4 == 0 && year % 100 != 0) && (year % 400 == 0)) //判断顺序，是2月才继续判断，节省时间
+        if(2 == month && ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))) //判断顺序，是2月才继续判断，节省时间
         {
             return 29;
         }
@@ -63,6 +65,9 @@ public:
         }
     }
 
+    //因为是全局函数要访问私有成员，所以加友元声明
+    friend ostream& operator<<(ostream& out, const Date& d);
+    friend istream& operator>>(istream& in, Date& d);
 private:
     int _year;
     int _month;
