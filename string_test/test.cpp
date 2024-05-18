@@ -51,7 +51,7 @@ void test2()
 	string::iterator it = s3.begin();
 	while (it != s3.end()) //end()为 \0 的位置
 	{
-		cout << *it++ << " ";
+		cout << *it++ << " "; //此处*也进行了操作符重载
 	}
 	cout << endl;
 
@@ -63,11 +63,187 @@ void test2()
 	cout << endl;
 }
 
+void test3()
+{
+	//反向迭代器（不常用）
+	string s1("hello world");
+	string::reverse_iterator rit = s1.rbegin();
+	while (rit != s1.rend())
+	{
+		cout << *rit++ << " ";//一定记得是++，且别忘了++
+	}
+	cout << endl;
+
+	//const_迭代器(迭代器指向的类容不可修改，const iterator是指迭代器无法更改指向)
+	const string s2("hello world");
+	string::const_iterator cit = s2.begin();//C++新增了cbegin和cend其实没大区别
+	while (cit != s2.end())
+	{
+		cout << *cit++ << " ";
+		//(*cit)++;只读不可写
+	}
+	cout << endl;
+
+	//还有const_reverse_iterator
+}
+
+void test4()
+{
+	//capacity相关
+
+	string s1("hello world");
+	cout << s1.size() << endl;
+	cout << s1.length() << endl;
+	//size和length其实功能一样都不记 \0，size为后加，为了和其他容器统一
+
+	//最大长度（不同机器不同）
+	cout << s1.max_size() << endl;
+
+	//可存容量（不同平台扩容机制不同，linux下基本为2倍扩容）
+	cout << s1.capacity() << endl;
+	//windows平台下的扩容规律
+	string s;
+	s.reserve(50);//reserve请求一段空间，直接申请一段需要的空间来避免扩容耗费(常用！！！！！)
+	//reserve(50)也不一定开50，可能更多（合理范围类）
+	//如果reserve的空间比当前空间小就不动，是不会缩容的
+	int sz = s.capacity();
+	cout << sz << endl;
+	for (int i = 0; i < 100; i++)
+	{
+		s.push_back('c');
+		if (sz != s.capacity())
+		{
+			sz = s.capacity();
+			cout << "capacity changed：" << sz << endl;
+		}
+	}
+
+	cout << "---------" << endl;
+	//clear清除数据，但不一定清空间（）
+	cout << s1 << endl;
+	cout << s1.capacity() << endl;
+	s1.clear();
+	cout << s1 << endl;
+	cout << s1.capacity() << endl;
+
+	cout << "---------------" << endl;
+	//缩容
+	string s2;
+	for (int i = 0; i < 50; i++)
+	{
+		s2.push_back('a');
+	}
+	cout << s2.capacity() << endl;
+	s2.clear();
+	s2.shrink_to_fit(); //默认最小缩容到15
+	cout << s2.capacity() << endl;
+
+	cout << "---------------" << endl;
+	//resize改变size
+	//[0, size, ..., capacity]
+	//比size小，删除多的部分
+	//比size大，比capacity小，增加空字符
+	//比capacity大扩容且加空字符
+	string s3("aksfwijasofjopqjfo");
+	cout << s3.capacity() << endl;
+	s3.resize(50);
+	cout << s3.capacity() << endl;
+	for (auto& e : s3)
+	{
+		cout << e << endl;
+	}
+}
+
+void test5()
+{
+	//string访问
+	
+	string s1("hello world");
+	//[] 和 at
+	//功能没区别，区别在于[]对于越界检查为断言，而at是抛异常
+	cout << s1[6] << endl;
+	cout << s1.at(6) << endl;
+
+	try
+	{
+		s1.at(20);
+	}
+	catch (const exception& e)
+	{
+		cout << e.what() << endl;
+	}
+	cout << endl;
+	//front and back返回string的首或尾字符(C++11)
+	string s2("apple");
+	cout << s2.front() << " " << s2.back() << endl;
+
+}
+
+void test6()
+{
+	//Modifiers修改
+	string s1("hello world");
+	s1.push_back('a'); //push_back只能插入字符
+	cout << s1 << endl;
+
+	s1.append("pennnn"); //插入字符串，append函数还有很多重载版本
+	cout << s1 << endl;
+
+	// += 则可以插入字符和字符串（常用！！！）
+	s1 += "cccc";
+	s1 += 'x';
+	cout << s1 << endl;
+
+	
+}
+
+void test7()
+{
+	//assign
+	string s1("hello world");
+	string s2 = s1;
+	cout << s1 << endl;
+
+	s1.assign("xxxxxxx"); //直接覆盖
+	cout << s1 << endl;
+
+	//insert（效率低）
+	s2.insert(1, "xxx"); //在下标1之前插入
+	cout << s2 << endl;
+
+	//erase（效率低）
+	s2.erase(1, 3); //从 下标位置 删除 几个
+	cout << s2 << endl;
+	s2.erase(2); // 从2位置开始删完
+	cout << s2 << endl;
+	cout << s2.capacity() << endl;
+	
+	//replace(还有很多重载版本，效率低，不常用)
+	string s3("jks niko simple");
+	s3.replace(5, 2, "aaa"); //从下标5开始将后两个字符替换成"aaa"，会挪动数据，效率也低
+	cout << s3 << endl;
+
+	cout << "-------------" << endl;
+	string s4("qwerty");
+	string s5("asdfghjklasdfghjkasd");
+	cout << s4.capacity() << endl;
+	cout << s5.capacity() << endl;
+
+	s4.swap(s5); //非算法库里的swap
+	cout << s4.capacity() << endl;
+	cout << s5.capacity() << endl;
+
+}
+
+
 int main()
 {
 	//test1();
-
-	test2();
-
+	//test2();
+	//test3();
+	//test4();
+	//test5();
+	//test6();
+	test7();
 	return 0;
 }
