@@ -310,6 +310,20 @@ void test10()
 	cout << str.size() - (pos + 1) << endl;
 }
 
+void test11()
+{
+	int i = 1024;
+	double d = 3.1415926536;
+	string s1 = to_string(i);
+	string s2 = to_string(d);
+	cout << s1 << " " << s2 << endl;
+
+	string s3("12.32");
+	int i2 = stoi(s3);
+	double d2 = stod(s3);
+	cout << i2 << " " << d2 << endl;
+}
+
 
 int main()
 {
@@ -322,6 +336,7 @@ int main()
 	//test7();
 	//test8();
 	//test9();
-	test10();
+	//test10();
+	test11();
 	return 0;
 }
