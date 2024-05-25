@@ -34,7 +34,7 @@ void test2()
 	string s1("hello world");  //字符串做参数做构造
 
 	//1.下标加方括号
-	for (int i = 0; i < s1.size(); i++)
+	for (size_t i = 0; i < s1.size(); i++)
 	{
 		cout << s1[i] << " ";
 		s1[i]++;  //还能修改
@@ -235,6 +235,81 @@ void test7()
 
 }
 
+void test8()
+{
+	//String operations
+	string s("abcde");
+	const char* c = s.c_str();
+	cout << c[2] << endl;
+
+	//copy：拷贝某一部分到字符数组
+	char buffer[20];
+	string str("Test string...");
+	size_t length = str.copy(buffer, 6, 5);//从下标5开始拷贝6个
+	buffer[length] = '\0';
+	cout << "buffer contains: " << buffer << '\n';
+}
+
+void test9()
+{
+	string s1("file.cpp");
+	//取文件后缀
+	size_t pos1 = s1.find('.');//If no matches were found, returns string::npos.
+	if (pos1 != string::npos)
+	{
+		string temp1 = s1.substr(pos1);
+		//string temp1 = s.substr(pos, s.size() - pos);
+		cout << temp1 << endl;
+	}
+
+	//rfind：从后往前找
+	string s2("app.ac.tar");
+	size_t pos2 = s2.rfind('.');
+	if (pos2 != string::npos)
+	{
+		string temp2 = s2.substr(pos2);
+		cout << temp2 << endl;
+	}
+
+	//string site("https://legacy.cplusplus.com/reference/string/string/?kw=string");
+	string site("https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&__biz=Mzg5MTY5NDUwMQ==&scene=1&album_id=3415392654954266631&count=3#wechat_redirect");
+	string protocol, domain, uri;
+	size_t i1 = site.find(':');
+	if (i1 != string::npos)
+	{
+		protocol = site.substr(0, i1 - 0);
+		cout << protocol << endl;
+	}
+	size_t i2 = site.find('/', i1 + 3);
+	if (i2 != string::npos)
+	{
+		domain = site.substr(i1 + 3, i2 - (i1 + 3));
+		cout << domain << endl;
+		uri = site.substr(i2 + 1);
+		cout << uri << endl;
+	}
+
+	//strstr
+	size_t i3 = site.find("weixin");
+	cout << i3 << endl; //找到就返回字串首字母的下标
+
+	//同c的strtok
+	//find_first_of(find_first_not_of)
+	//find_last_of(find_last_not_of)
+
+	//compare
+}
+
+void test10()
+{
+	string str;
+	//cin >> str;
+	getline(cin, str);
+
+	size_t pos = str.rfind(' ');
+	cout << str.size() - (pos + 1) << endl;
+}
+
 
 int main()
 {
@@ -244,6 +319,9 @@ int main()
 	//test4();
 	//test5();
 	//test6();
-	test7();
+	//test7();
+	//test8();
+	//test9();
+	test10();
 	return 0;
 }
