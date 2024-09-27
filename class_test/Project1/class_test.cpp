@@ -1,30 +1,45 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include <iostream>
 
-class A
-{
-public:
-	A(const A& a)
-	{}
-
-private:
-	int _id;
-};
-
-int main()
-{
-	std::cout << 1;
-	//只有拷贝构造时
-	//A a1(); //编译可通过
-
-	//A a2; //无法构造
-
-	return 0;
-}
 
 
 
-//空类大小、空指针引用问题
+
+
+
+
+
+
+
+
+
+
+
+
+//2、拷贝构造显示声明后，编译器不生成默认构造函数。
+//class A
+//{
+//public:
+//	A(const A& a)
+//	{}
+//
+//private:
+//	int _id;
+//};
+//
+//int main()
+//{
+//	std::cout << 1;
+//	//只有拷贝构造时
+//	//A a1(); //编译可通过,是一个函数声明（而不是对象实例化）。
+//
+//	//A a2; //无法构造
+//
+//	return 0;
+//}
+
+
+//1、空类大小、空指针引用问题
 //class Date
 //{};
 //
