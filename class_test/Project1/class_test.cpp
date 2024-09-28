@@ -2,17 +2,64 @@
 #include <iostream>
 
 
+//3、赋值运算符重载
+class MyMath
+{
+public:
+
+	MyMath(int x = 0, int y = 0, int z = 0)
+		:_x(x), _y(y), _z(z)
+	{}
+
+	//以一个已经存在的对象来覆盖另一个已存在的对象，不希望m被修改，所以要加const
+	MyMath& operator=(const MyMath& m)
+	{
+		//判断为不同对象才赋值
+		if (this != &m)
+		{
+			_x = m._x;
+			_y = m._y;
+			_z = m._z;
+		}
+
+		return *this;
+	}
+
+	//后置++重载
+	MyMath operator++(int)
+	{
+		MyMath temp(*this);
+		++_x;
+		++_y;
+		++_z;
+
+		return temp;
+	}
+	//前置++重载
+	MyMath& operator++()
+	{
+		_x++;
+		_y++;
+		_z++;
+		return *this;
+	}
 
 
+private:
+	int _x;
+	int _y;
+	int _z;
+};
 
+int main()
+{
+	MyMath m1, m2;
+	m1++;
 
+	m2 = m1;
 
-
-
-
-
-
-
+	return 0;
+}
 
 
 
