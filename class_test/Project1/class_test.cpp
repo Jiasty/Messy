@@ -304,3 +304,28 @@
 //    d1 = 2023;
 //    // 将1屏蔽掉，2放开时则编译失败，因为explicit修饰构造函数，禁止了单参构造函数类型转换的作用
 //}
+
+
+//static成员
+//class Eg
+//{
+//public:
+//	Eg(int id, int num)
+//		:_id(id)
+//		//,_num(num) //static成员只能在类外初始化，why?
+//	{
+//		_num = num;
+//	}
+//
+//	int _id;
+//	static int _num;
+//};
+//
+//int main()
+//{
+//	//无法编译
+//	//Eg e1(01, 5);
+//	//std::cout << e1._id << e1._num << std::endl;
+//
+//	return 0;
+//}
