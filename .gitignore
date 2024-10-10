@@ -8,3 +8,6 @@
 *vcxproj
 *.filters
 *.user
+
+Debug
+.vs
