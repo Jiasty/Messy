@@ -329,3 +329,80 @@
 //
 //	return 0;
 //}
+
+
+//inheritance继承
+//class Person
+//{
+//public:
+//	void Print()
+//	{
+//		std::cout << "name:" << _name << std::endl;
+//		std::cout << "age:" << _age << std::endl;
+//	}
+//protected:
+//	std::string _name = "Jiasty"; // 姓名
+//	int _age = 18;  // 年龄
+//};
+////继承后父类的Person的成员（成员函数+成员变量）都会变成子类的一部分。
+////这里体现出了Student和Teacher复用了Person的成员。
+//class Student : public Person
+//{
+//protected:
+//	int _stuid; // 学号
+//};
+//
+//class Teacher : public Person
+//{
+//protected:
+//	int _jobid; // 工号
+//};
+//int main()
+//{
+//	Student s;
+//	Teacher t;
+//	s.Print();
+//
+//	t.Print();
+//	return 0;
+//}
+
+
+//切片
+//class Person
+//{
+//protected:
+//	std::string _name;
+//	std::string _sex;
+//	int _age; // 年龄
+//};
+//
+//class Student : public Person
+//{
+//public:
+//	int _id; // 学号
+//};
+//
+//int main()
+//{
+//	Student sobj;
+//	// 1.子类对象可以赋值给父类对象/指针/引用
+//	Person pobj = sobj;
+//	Person* pp = &sobj;
+//	Person& rp = sobj;
+//
+//	//2.基类对象不能赋值给派生类对象
+//	//sobj = pobj;
+//
+//	//3.基类的指针可以通过强制类型转换赋值给派生类的指针
+//	pp = &sobj;
+//	Student* ps1 = (Student*)pp; // 这种情况转换时可以的。
+//	ps1->_id = 10;
+//
+//	//pp = &pobj;
+//	//Student* ps2 = (Student*)pp; // 这种情况转换时虽然可以，但是会存在越界访问的问题
+//	//ps2->_id = 10;
+//
+//	return 0;
+//}
+
