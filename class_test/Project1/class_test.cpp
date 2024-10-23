@@ -454,5 +454,11 @@ int main()
 	std::cout << std::endl;
 	a1.PrintInfo();
 
+	//ÇĞÆ¬
+	c1 = a1;
+	c1.PrintInfo();
+	std::cout << std::endl;
+	a1.PrintInfo();
+
 	return 0;
 }
