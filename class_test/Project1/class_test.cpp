@@ -407,58 +407,60 @@
 //}
 
 //继承作用域
-class Car
-{
-public:
-	int n = 0;
-public:
-	Car(std::string name = "Car", int No = 0, int weight = 0)
-		:_name(name)
-		,_No(No)
-		,_weight(weight)
-	{
-		std::cout << "Car()" << std::endl;
-	}
+//class Car
+//{
+//public:
+//	int n = 0;
+//public:
+//	Car(std::string name = "Car", int No = 0, int weight = 0)
+//		:_name(name)
+//		,_No(No)
+//		,_weight(weight)
+//	{
+//		std::cout << "Car()" << std::endl;
+//	}
+//
+//	void PrintInfo()
+//	{
+//		//std::cout << Audi::n << std::endl; //基类无法访问派生类中的同名成员
+//		std::cout << _name << _No << _weight << std::endl;
+//	}
+//
+//private:
+//	std::string _name;
+//	int _No;
+//	int _weight;
+//};
+//
+//class Audi : public Car
+//{
+//public:
+//	int n = 1; //构成隐藏
+//public:
+//	void PrintInfo() //同名函数不构成重载，构成隐藏
+//	{
+//		std::cout << Car::n << std::endl; //派生类可以访问基类的同名成员
+//		std::cout << n << std::endl;
+//		std::cout << "This is a tmp." << std::endl;
+//	}
+//};
+//
+//int main()
+//{
+//	Car c1;
+//	Audi a1;//派生类在构造时，也会调用基类的构造
+//
+//	c1.PrintInfo();
+//	std::cout << std::endl;
+//	a1.PrintInfo();
+//
+//	//切片
+//	c1 = a1;
+//	c1.PrintInfo();
+//	std::cout << std::endl;
+//	a1.PrintInfo();
+//
+//	return 0;
+//}
 
-	void PrintInfo()
-	{
-		//std::cout << Audi::n << std::endl; //基类无法访问派生类中的同名成员
-		std::cout << _name << _No << _weight << std::endl;
-	}
 
-private:
-	std::string _name;
-	int _No;
-	int _weight;
-};
-
-class Audi : public Car
-{
-public:
-	int n = 1; //构成隐藏
-public:
-	void PrintInfo() //同名函数不构成重载，构成隐藏
-	{
-		std::cout << Car::n << std::endl; //派生类可以访问基类的同名成员
-		std::cout << n << std::endl;
-		std::cout << "This is a tmp." << std::endl;
-	}
-};
-
-int main()
-{
-	Car c1;
-	Audi a1;//派生类在构造时，也会调用基类的构造
-
-	c1.PrintInfo();
-	std::cout << std::endl;
-	a1.PrintInfo();
-
-	//切片
-	c1 = a1;
-	c1.PrintInfo();
-	std::cout << std::endl;
-	a1.PrintInfo();
-
-	return 0;
-}
