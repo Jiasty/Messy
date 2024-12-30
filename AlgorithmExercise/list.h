@@ -8,8 +8,8 @@
 typedef char* LTDataType;
 
 typedef struct ListNode
-{
-    LTDataType val;
+{LTDataType val;
+    
     struct ListNode* next;
     struct ListNode* prev;
 }ListNode;

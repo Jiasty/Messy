@@ -25,7 +25,17 @@ ListNode* ListCreatNode(const LTDataType x)
         perror("malloc fail");
         exit(-1); //注意函数返回值类型ListNode* 别用return
     }
-    if (x == " ") return newNode;
+    if (strcmp(x, " ") == 0) return newNode;
+    // 为字符串分配内存并复制内容
+    // 由于val的类型为typedef char* LTDataType，不是一个固定长度的字符数组
+    // 因此每次插入一个新的节点时，你需要为该字符串分配内存。
+    // 如果直接将 temp 赋值给 val，而不分配内存，那么会遇到悬挂指针的问题。
+    newNode->val = (char*)malloc(strlen(x) + 1); //此处很重要！！！
+    if (newNode->val == NULL) 
+    {
+        perror("malloc failed for string");
+        exit(-1);
+    }
     strncpy(newNode->val, x, 4);
     newNode->val[4] = '\0'; // 确保字符串终止符
     newNode->next = NULL;
@@ -70,6 +80,7 @@ void ListPrint(ListNode* plist)
     while (cur != plist) //while(cur)注意这是双向链表，没有空的时候
     {
         printf("%s", cur->val);
+        if (cur->next != plist) printf(",");
         cur = cur->next;
     }
     printf("\n");
