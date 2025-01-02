@@ -11,7 +11,7 @@ ListNode* ListInit()
     //一定注意与创普通结点不同，这里是双链表头节点，一定得循环
     plist->next = plist;
     plist->prev = plist;
-
+    plist->NodeNum = 0;
     return plist;
 }
 
@@ -36,8 +36,8 @@ ListNode* ListCreatNode(const LTDataType x)
         perror("malloc failed for string");
         exit(-1);
     }
-    strncpy(newNode->val, x, 4);
-    newNode->val[4] = '\0'; // 确保字符串终止符
+    strncpy(newNode->val, x, strlen(x) + 1);
+    newNode->val[strlen(x) + 1] = '\0'; // 确保字符串终止符
     newNode->next = NULL;
     newNode->prev = NULL;
 
@@ -56,17 +56,10 @@ void ListDestory(ListNode* plist)
         plist->next = curNext;
         curNext->prev = plist;
         cur = curNext;
-
-        //其实不用再链接结点
-        // ListNode* next = cur->next;
-        // free(cur);
-        // cur = next;
     }
     cur = NULL;
     free(plist);
     plist = NULL;
-
-    printf("List have been destoried\n");
 }
 
 // 双向链表打印OK
@@ -92,6 +85,7 @@ void ListPushBack(ListNode* plist, LTDataType x)
     assert(plist);
 
     ListNode* newNode = ListCreatNode(x);
+    newNode->NodeNum++;
     ListNode* tail = plist->prev;
 
     //不管有没有有效结点都适用
@@ -107,6 +101,7 @@ void ListPushFront(ListNode* plist, LTDataType x)
     assert(plist);
 
     ListNode* newNode = ListCreatNode(x);
+    newNode->NodeNum++;
 
     newNode->next = plist->next;
     plist->next->prev = newNode;
@@ -114,4 +109,9 @@ void ListPushFront(ListNode* plist, LTDataType x)
     newNode->prev = plist;
 
     //ListInsert(plist->next, x);
+}
+
+int NodeNum(ListNode* plist)
+{
+    return plist->NodeNum;
 }

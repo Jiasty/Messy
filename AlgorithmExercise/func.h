@@ -1,5 +1,4 @@
 #pragma once
-#include<stdio.h>
 #include"list.h"
 
 //打印功能选择菜单
