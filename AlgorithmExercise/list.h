@@ -6,13 +6,12 @@
 
 //带头+双向+循环链表
 typedef char* LTDataType;
-
+static int Node_Num = 0;
 typedef struct ListNode
 {LTDataType val;
     
     struct ListNode* next;
     struct ListNode* prev;
-    int NodeNum;
 }ListNode;
 
 //双链表初始化，初始化出头节点
@@ -30,6 +29,3 @@ void ListPrint(ListNode* plist);
 void ListPushBack(ListNode* plist, LTDataType x);
 // 双向链表头插
 void ListPushFront(ListNode* plist, LTDataType x);
-
-//返回现有节点数
-int NodeNum(ListNode* plist);

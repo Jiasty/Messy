@@ -4,6 +4,6 @@
 
 int main()
 {
-	Menu();
+	while(1) Menu();
 	return 0;
 }

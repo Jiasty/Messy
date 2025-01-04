@@ -11,8 +11,19 @@ ListNode* ListInit()
     //一定注意与创普通结点不同，这里是双链表头节点，一定得循环
     plist->next = plist;
     plist->prev = plist;
-    plist->NodeNum = 0;
     return plist;
+}
+// 计算链表节点个数
+int countNodes(ListNode* head) 
+{
+    int count = 0;
+    ListNode* current = head->next;
+    while (current != NULL && current != head) 
+    {
+        count++;
+        current = current->next;
+    }
+    return count;
 }
 
 // 创建一个双链表的结点并返回地址.顺带初始化val OK
@@ -85,7 +96,6 @@ void ListPushBack(ListNode* plist, LTDataType x)
     assert(plist);
 
     ListNode* newNode = ListCreatNode(x);
-    newNode->NodeNum++;
     ListNode* tail = plist->prev;
 
     //不管有没有有效结点都适用
@@ -101,7 +111,6 @@ void ListPushFront(ListNode* plist, LTDataType x)
     assert(plist);
 
     ListNode* newNode = ListCreatNode(x);
-    newNode->NodeNum++;
 
     newNode->next = plist->next;
     plist->next->prev = newNode;
@@ -109,9 +118,4 @@ void ListPushFront(ListNode* plist, LTDataType x)
     newNode->prev = plist;
 
     //ListInsert(plist->next, x);
-}
-
-int NodeNum(ListNode* plist)
-{
-    return plist->NodeNum;
 }
