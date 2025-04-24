@@ -27,5 +27,8 @@ int main()
 	float b = 7.0 / 2;
 	printf("%f %f\n", a, b);
 
+	int n = (int)3.14;
+	printf("%d\n", n);
+
 	return 0;
 }
