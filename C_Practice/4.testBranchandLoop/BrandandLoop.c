@@ -1,8 +1,33 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void GuesstheNumber()
+{
+	int num = rand() % 101 + 1;
+	int in = -1;
+	printf("Guess the number(0 ~ 100): ");
+	while (1)
+	{
+		(void)scanf("%d", &in);
+		if (in > num)
+			printf("大了\n");
+		else if (in < num)
+			printf("小了\n");
+		else
+		{
+			printf("对了\n");
+			break;
+		}
+	}
+}
 
 int main()
 {
+	/*srand((unsigned int)time(NULL));
+	GuesstheNumber();*/
+
 	//逻辑操作符短路
 	int n = 10;
 	if (++n >= 5 || --n <= 1)
