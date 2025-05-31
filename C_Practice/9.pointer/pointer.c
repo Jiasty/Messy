@@ -4,6 +4,10 @@
 #include <assert.h>
 
 void print(int arr[], int size);
+int Add(int x, int y);
+int Sub(int x, int y);
+
+typedef int(*pf)(int, int);
 
 int main()
 {
@@ -68,19 +72,54 @@ int main()
 	int* pnum = &num;
 	int** ppnum = &pnum;
 	printf("%d\n", **ppnum);
+	printf("-----------------\n");
 
 	// 字符指针
+	char ch = 'a';
+	char* pch = &ch;
+	char* pch2 = "abcd";
+	char* pch3 = "abcd";
+	// const char* pch2 = "abcd";
+	// *pch2 = "a"; 常量字符串不允许修改，且只会保存一份
+	printf("%p %p %p\n", pch, pch2, pch3);
 
+
+	// 数组指针变量
+	int b[10];
+	int(*pb)[10] = &b;
+
+	int* pp = *pb; // pb解引用就是数组名，也就是首元素地址，可以用int*接收
+	printf("%p %p\n", b, pp);
+
+
+	// 函数指针变量
+	int(*pAdd)(int, int) = Add;
+	pf pAdd2 = Add;
+	printf("%d %d %d\n", (*pAdd)(1, 2), pAdd(1, 2), pAdd2(1, 2));
+
+	int(*farr[4])(int, int) = { Add, Sub };
+	// pf farr[4] = { Add, Sub };
+	printf("%d %d\n", farr[0](1, 2), farr[1](1, 2));
 
 	return 0;
 }
 
 void print(int arr[], int size)
 {
-	// int size = sizeof(arr) / sizeof(arr[0]); // 此处算出来为1
+	// int size = sizeof(arr) / sizeof(arr[0]); // arr为首元素地址，此处算出来为1
 	for (int i = 0; i < size; i++)
 	{
 		printf("%d ", arr[i]);
 	}
 	printf("\n");
+}
+
+int Add(int x, int y)
+{
+	return x + y;
+}
+
+int Sub(int x, int y)
+{
+	return x - y;
 }
