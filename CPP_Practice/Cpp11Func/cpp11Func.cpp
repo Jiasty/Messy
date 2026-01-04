@@ -3,6 +3,9 @@
 #include <iostream>
 #include <algorithm>
 #include <functional>
+#include <thread>
+#include <mutex>
+#include <atomic>
 
 #include <string>
 #include <vector>
@@ -374,7 +377,103 @@ void test7()
 	auto f6 = std::bind(PrintInfo, "Abs", std::placeholders::_1, std::placeholders::_2);
 	f6(188, 10);
 	f6(100, 30);
+
+	std::cout << std::endl;
+
+	auto f7 = std::bind(PrintInfo, std::placeholders::_1, 888, std::placeholders::_2);
+	f7("111", 20);
 }
+
+// 15、多线程
+void Print(int n, int start)
+{
+
+	for (int i = start; i < n; i++)
+	{
+		std::cout << i << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+void test8()
+{
+	std::thread t1(Print, 10, 0);
+	std::thread t2(Print, 20, 2);
+
+	std::cout << t1.get_id() << std::endl << std::endl; // 打印从线程id
+	std::cout << t2.get_id() << std::endl << std::endl; // 打印从线程id
+
+	t1.join();
+	t2.join();
+
+	std::cout << std::this_thread::get_id() << std::endl; // 打印主线程id
+
+	std::cout << "======================" << std::endl;
+}
+
+// mutex锁
+class LockGuard
+{
+public:
+	LockGuard(std::mutex& mt)
+		:_mt(mt)
+	{
+		_mt.lock();
+	}
+	// RAII
+	~LockGuard()
+	{
+		_mt.unlock();
+	}
+
+private:
+	std::mutex& _mt;
+};
+
+
+int x = 0;
+int y_1 = 0;
+std::atomic<int> y_2 = 0; // atomic原子操作
+
+std::mutex mt;
+void Inc(int n)
+{
+	{
+		// mt.lock();
+		LockGuard lock(mt);
+		for (int i = 0; i < n; i++)
+		{
+			++x;
+		}
+		// mt.unlock();
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		++y_1;
+		++y_2;
+	}
+	
+}
+
+void test9()
+{
+	std::thread t1(Inc, 100000);
+	std::thread t2(Inc, 200000);
+
+	t1.join();
+	t2.join();
+
+	std::cout << x << std::endl;
+
+	std::cout << "*************" << std::endl;
+
+	std::cout << y_1 << std::endl;
+	std::cout << y_2 << " " << typeid(y_2).name() << std::endl << std::endl;
+	printf("%d", y_2.load());
+}
+
+
 
 
 int main()
@@ -385,7 +484,9 @@ int main()
 	// test4();
 	// test5();
 	// test6();
-	test7();
+	// test7();
+	// test8();
+	test9();
 
 	return 0;
 }
