@@ -160,7 +160,7 @@ class Last final
 
 
 // 多态原理
-class Base
+class Base1
 {
 public:
 	virtual void test()
@@ -195,7 +195,7 @@ public:
 private:
 	int _a = 1;
 };
-class Derive : public Base
+class Derive2 : public Base2
 {
 public:
 	virtual void Func1()
@@ -206,23 +206,79 @@ private:
 	int _d = 2;
 };
 
+void Func(Base2* b)
+{
+	b->Func1();
+}
 
 void test4()
 {
-	Base a;
-	std::cout << sizeof(a) << std::endl;
+	Base1 base;
+	std::cout << sizeof(base) << std::endl;
 
 	Base2 b;
+	Func(&b);
+
+	Derive2 d;
+	Func(&d);
+}
+
+
+// 单继承中的虚函数表
+class Base 
+{
+public:
+	virtual void func1() 
+	{ 
+		std::cout << "Base::func1" << std::endl; 
+	}
+	virtual void func2() 
+	{ 
+		std::cout << "Base::func2" << std::endl; 
+	}
+private:
+	int a;
+};
+
+class Derive :public Base 
+{
+public:
+	virtual void func1() 
+	{ 
+		std::cout << "Derive::func1" << std::endl; 
+	}
+	virtual void func3() 
+	{ 
+		std::cout << "Derive::func3" << std::endl; 
+	}
+	virtual void func4() 
+	{ 
+		std::cout << "Derive::func4" << std::endl; 
+	}
+private:
+	int b;
+};
+
+void test5()
+{
+	Base b;
 	Derive d;
 }
 
+// 打印虚函数表
+typedef void (*VFPTR)();
+void PrintVirtualFuncTable(VFPTR vTable[])
+{
+
+}
 
 int main()
 {
 	// test1();
 	// test2();
 	// test3();
-	test4();
+	// test4();
+	test5();
 
 	return 0;
 }
