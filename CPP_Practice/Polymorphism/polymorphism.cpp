@@ -211,6 +211,12 @@ void Func(Base2* b)
 	b->Func1();
 }
 
+// 普通调用，编译时就确定，是哪个类型的对象就去调对应的虚函数
+void Func2(Base2 b)
+{
+	b.Func1();
+}
+
 void test4()
 {
 	Base1 base;
@@ -221,6 +227,8 @@ void test4()
 
 	Derive2 d;
 	Func(&d);
+
+	Func2(d); // 非多态
 }
 
 
@@ -265,12 +273,118 @@ void test5()
 	Derive d;
 }
 
-// 打印虚函数表
+// @@@打印虚函数表
 typedef void (*VFPTR)();
 void PrintVirtualFuncTable(VFPTR vTable[])
 {
+	// 依次取虚表中的虚函数指针打印并调用。调用就可以看出存的是哪个函数
+	std::cout << " 虚表地址>" << vTable << std::endl;
 
+	for (int i = 0; vTable[i] != nullptr; i++)
+	{
+		printf(" 第%d个虚函数地址 :0X%x,->", i, vTable[i]);
+		VFPTR f = vTable[i];
+		f();
+	}
+
+	std::cout << std::endl;
 }
+
+void test6()
+{
+	Base b;
+	Derive d;
+
+	// 思路：取出b、d对象的头4bytes，就是虚表的指针，虚函数表本质是一个存虚函数指针的指针数组，这个数组最后面放了一个nullptr
+	// 1.先取b的地址，强转成一个int*的指针
+	// 2.再解引用取值，就取到了b对象头4bytes的值，这个值就是指向虚表的指针
+	// 3.再强转成VFPTR*，因为虚表就是一个存VFPTR类型(虚函数指针类型)的数组。
+	// 4.虚表指针传递给PrintVTable进行打印虚表
+	// 5.需要说明的是这个打印虚表的代码经常会崩溃，因为编译器有时对虚表的处理不干净，
+	//   虚表最后面没有放nullptr，导致越界，这是编译器的问题。
+	//   我们只需要点目录栏的 - 生成 - 清理解决方案，再编译就好了。
+	VFPTR* vfptrb = (VFPTR*)(*(int*)&b);
+	PrintVirtualFuncTable(vfptrb);
+
+	VFPTR* vfptrd = (VFPTR*)(*(int*)&d);
+	PrintVirtualFuncTable(vfptrd);
+}
+
+
+// 抽象类 
+class Car
+{
+public:
+	virtual void Drive() = 0;
+};
+
+class Audi : public Car
+{
+public:
+	virtual void Drive()
+	{
+		std::cout << "virtual void Drive()" << std::endl;
+	}
+};
+
+void test7()
+{
+	// Car c1; 不可实例化出对象
+	Audi a4;
+	a4.Drive();
+
+	Car* c = &a4;
+	c->Drive();
+}
+
+
+ 
+// 多继承中的虚函数表
+//class BaseClass1 
+//{
+//public:
+//	virtual void func1() { std::cout << "BaseClass1::func1" << std::endl; }
+//	virtual void func2() { std::cout << "BaseClass1::func2" << std::endl; }
+//private:
+//	int b1;
+//};
+//class BaseClass2 
+//{
+//public:
+//	virtual void func1() { std::cout << "BaseClass2::func1" << std::endl; }
+//	virtual void func2() { std::cout << "BaseClass2::func2" << std::endl; }
+//private:
+//	int b2;
+//};
+//class DeriveClass : public BaseClass1, public BaseClass2 {
+//public:
+//	virtual void func1() { std::cout << "DeriveClass::func1" << std::endl; }
+//	virtual void func3() { std::cout << "DeriveClass::func3" << std::endl; }
+//private:
+//	int d1;
+//};
+//typedef void(*VFPTR) ();
+//void PrintVTable(VFPTR vTable[])
+//{
+//	std::cout << " 虚表地址>" << vTable << std::endl;
+//	for (int i = 0; vTable[i] != nullptr; ++i)
+//	{
+//		printf(" 第%d个虚函数地址 :0X%x,->", i, vTable[i]);
+//		VFPTR f = vTable[i];
+//		f();
+//	}
+//	std::cout << std::endl;
+//}
+//void test8()
+//{
+//	DeriveClass d;
+//	VFPTR* vTableb1 = (VFPTR*)(*(int*)&d);
+//	PrintVTable(vTableb1);
+//
+//	VFPTR* vTableb2 = (VFPTR*)(*(int*)((char*)&d + sizeof(BaseClass1)));
+//	PrintVTable(vTableb2);
+//}
+
 
 int main()
 {
@@ -278,7 +392,10 @@ int main()
 	// test2();
 	// test3();
 	// test4();
-	test5();
+	// test5();
+	// test6();
+	// test7();
+	// test8();
 
 	return 0;
 }
