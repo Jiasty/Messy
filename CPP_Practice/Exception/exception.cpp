@@ -196,10 +196,99 @@ void test2()
 	}
 }
 
+
+// 多层异常控制(控制流)
+
+int div()
+{
+	int a, b;
+	std::cin >> a >> b;
+	if (b == 0)
+		throw std::invalid_argument("除0错误");
+	return a / b;
+}
+
+void Func()
+{
+	// 1、如果p1这里new 抛异常会如何？
+	// 2、如果p2这里new 抛异常会如何？
+	// 3、如果div调用这里又会抛异常会如何？
+	// int* p1 = new int[];
+	// int* p2 = new int[];
+	// std::cout << div() << std::endl;
+	// delete[] p1;
+	// delete[] p2;
+
+	// [步骤 1] 分配 p1 成功 (假设地址 0x100)
+	int* p1 = new int[10];
+	int* p2 = nullptr;
+	try
+	{
+		// [步骤 2] 尝试分配 p2... 失败！抛出 std::bad_alloc 异常
+		// 注意：一旦这里抛出异常，CPU 立即停止顺序执行
+		// 不会进入内层的 try，也不会执行内层的 catch
+		// @@@而是直接寻找最近的匹配的 catch 块@@@
+		p2 = new int[10];
+
+		// ... (中间这一大坨代码全部被跳过) ...
+		try
+		{
+			std::cout << div() << std::endl;
+		}
+		catch (...)
+		{
+			// div()可能抛异常，p1和p2都申请了资源，得释放
+			delete[] p1;
+			p1 = nullptr; // 置空防止外层catch双重释放p1 ！！！
+			std::cout << "delete[] p1" << std::endl;
+			delete[] p2;
+			p2 = nullptr;
+			std::cout << "delete[] p2" << std::endl;
+			throw;
+		}
+	}
+	catch (...) // [步骤 3] 捕获到 p2 分配失败的异常
+	{
+		// [步骤 4] 执行清理
+		delete[] p1; // p2抛异常，p1已申请资源，不释放则资源泄露
+		p1 = nullptr;
+		std::cout << "delete[] p1" << std::endl;
+
+		// [步骤 5] 再次抛出异常！
+		// 关键点：这一行代码执行瞬间，Func 函数宣告“死亡”！
+		// 控制流直接飞出 Func 函数，飞回到调用 Func() 的地方（比如 main 函数）。
+		throw;
+	}
+
+	// ==========================================
+	// 下面是“死亡区域” (Unreachable Code)
+	// 因为上面的 throw 已经把函数终结了，
+	// 所以在 p2 失败的这个分支里，CPU 永远走不到这里！
+	// ==========================================
+
+	delete[] p1;
+	std::cout << "delete[] p1" << std::endl;
+	delete[] p2;
+	std::cout << "delete[] p2" << std::endl;
+}
+void test3()
+{
+	try
+	{
+		Func();
+	}
+	catch (std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+}
+
+
 int main()
 {
 	// test1();
-	test2();
+	// test2();
+	test3();
 
 
 	return 0;
